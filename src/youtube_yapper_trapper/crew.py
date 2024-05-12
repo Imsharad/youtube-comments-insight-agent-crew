@@ -1,13 +1,23 @@
+# importing custom tool we created
 from youtube_yapper_trapper.tools.custom_tool import YouTubeCommentsTool
+
+# crewai for orchestrating agents
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
+
+# langchain
 from langchain_openai import ChatOpenAI
 from langchain_groq import ChatGroq
 from agentops.agent import track_agent
 import agentops
 import os
 
+# Load environment variables from the root .env file
+from dotenv import load_dotenv
+load_dotenv()
 
+# this will tracks agents out-of-box without 
+# further configuration
 agentops.init()
 
 
@@ -19,20 +29,24 @@ class YoutubeCommentsCrew:
     tasks_config = "config/tasks.yaml"
 
     def __init__(self) -> None:
-        # Groq
-        self.groq_llm = ChatGroq(
-            temperature=0,
-            groq_api_key=os.environ.get("GROQ_API_KEY"),
-            model_name="llama3-70b-8192",
-        )
+        self.current_model = self.select_model()
 
-        # Ollama
-        self.ollama_llm = ChatOpenAI(
-            model="mistral",
-            base_url="http://localhost:11434/v1",
-            api_key="ollama",  # something random
-            temperature=0,
-        )
+    def select_model(self):
+        # Example: Choose model based on an environment variable
+        model_choice = os.getenv('MODEL_CHOICE', 'groq').lower()
+        if model_choice == 'ollama':
+            return ChatOpenAI(
+                model="mistral",
+                base_url="http://localhost:11434/v1",
+                api_key="ollama",
+                temperature=0,
+            )
+        else:
+            return ChatGroq(
+                temperature=0,
+                groq_api_key=os.environ.get("GROQ_API_KEY"),
+                model_name="llama3-70b-8192",
+            )
 
     @track_agent(name="comment_fetcher")
     @agent
@@ -42,7 +56,7 @@ class YoutubeCommentsCrew:
             config=self.agents_config["comment_fetcher"],
             tools=[YouTubeCommentsTool()],
             allow_delegation=False,
-            llm=self.ollama_llm,
+            llm=self.current_model,
             verbose=True,
         )
 
@@ -52,7 +66,7 @@ class YoutubeCommentsCrew:
         """Agent responsible for analyzing comments and generating insights."""
         return Agent(
             config=self.agents_config["insights_analyst"],
-            llm=self.ollama_llm,
+            llm=self.current_model,
             allow_delegation=False,
             verbose=True,
         )
@@ -63,7 +77,7 @@ class YoutubeCommentsCrew:
         """Agent responsible for writing detailed reports based on the analysis."""
         return Agent(
             config=self.agents_config["report_writer"],
-            llm=self.ollama_llm,
+            llm=self.current_model,
             allow_delegation=False,
             verbose=True,
         )

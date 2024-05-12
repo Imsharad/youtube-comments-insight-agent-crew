@@ -1,6 +1,21 @@
-# YoutubeYapperTrapper Crew
+# Seiki Crew 
+**Seiki** (製作者) in Japanese means *creator*.
 
-Welcome to the YoutubeYapperTrapper Crew project, powered by [CrewAI](https://crewai.com) + [AgentOps for observability](https://www.agentops.ai/) + [YouTube Data API](https://developers.google.com/youtube/v3/docs/comments/list). This project allows agents to take a given YouTube URL, extracts all the comments, and generates a final report with insights to inform better content creation.
+Welcome to the Seiki Crew project, 
+powered by [CrewAI](https://crewai.com) + 
+[AgentOps for observability](https://www.agentops.ai/) + 
+[YouTube Data API](https://developers.google.com/youtube/v3/docs/comments/list). 
+
+This project allows agents to take a given YouTube URL, extracts all the comments, and generates a final report with insights to inform better content creation.
+
+## Tech Stack
+
+- 🐍 Python
+- 📦 Poetry
+- 📺 YouTube Data API
+- 🤖 OpenAI API
+- 📂 .env for environment management
+
 
 ## Crew architecture diagram
 
@@ -38,28 +53,33 @@ poetry install
 
 **Add your `OPENAI_API_KEY` into the `.env` file if you want to use it.**
 
-- Modify `src/youtube_yapper_trapper/config/agents.yaml` to define your agents
-- Modify `src/youtube_yapper_trapper/config/tasks.yaml` to define your tasks
-- Modify `src/youtube_yapper_trapper/crew.py` to add your own logic, tools and specific args
-- Modify `src/youtube_yapper_trapper/main.py` to add custom inputs for your agents and tasks
+- Modify `src/seiki/config/agents.yaml` to define your agents
+- Modify `src/seiki/config/tasks.yaml` to define your tasks
+- Modify `src/seiki/crew.py` to add your own logic, tools and specific args
+- Modify `src/seiki/main.py` to add custom inputs for your agents and tasks
 
 ## Running the Project
 
 Rename the `.env_example` file to `.env`, add your API keys, and save the file.
 
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
+To kickstart your crew of AI agents and begin task execution, 
+run this from the root folder of your project:
 
 ```bash
-poetry run youtube_yapper_trapper
+poetry run seiki
 ```
 
-This command initializes the youtube-yapper-trapper Crew, assembling the agents and assigning them tasks as defined in your configuration.
+This command initializes the seiki Crew, assembling the agents and assigning them tasks as defined in your configuration.
 
 This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
 
 ## Understanding Your Crew
 
-The youtube-yapper-trapper Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
+The seiki Crew is composed of multiple AI agents, 
+each with unique roles, goals, and tools. 
+These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, 
+leveraging their collective skills to achieve complex objectives. 
+The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
 
 ## Support
 

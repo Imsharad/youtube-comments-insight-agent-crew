@@ -27,9 +27,14 @@ def run():
     inputs = {"video_id": video_id}
     crew = YoutubeCommentsCrew()
     result = crew.crew().kickoff(inputs=inputs)
-    print("Analysis Result:")
-    print(result)
-
+    
+    # Save the result to a markdown file
+    with open("analysis_result.md", "w") as file:
+        file.write("# Analysis Result\n")
+        file.write("```\n")
+        file.write(str(result))
+        file.write("\n```\n")
+    print("Analysis result saved to analysis_result.md")
 
 if __name__ == "__main__":
     run()
